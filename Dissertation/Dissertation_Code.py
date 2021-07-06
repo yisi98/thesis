@@ -335,7 +335,7 @@ def split_data(image_data, labels):
 # In[41]:
 
 
-split_data(image_data,labels)
+#split_data(image_data,labels)
 
 
 # In[42]:
@@ -418,7 +418,7 @@ name_model = 'test-{}'.format(int(time.time()))
 # In[52]:
 
 
-tensorboard = TensorBoard(log_dir = 'logs/{}'.format(name_model))
+#tensorboard = TensorBoard(log_dir = 'logs/{}'.format(name_model))
 
 
 # In[53]:
