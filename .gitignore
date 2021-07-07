@@ -5,3 +5,7 @@ Dissertation/logs/test-1624287906/train/events.out.tfevents.1624288071.MAIN.7432
 *.png
 *.ipynb
 *.h5
+*.npy
+*.npy
+*.npy
+*.npy
