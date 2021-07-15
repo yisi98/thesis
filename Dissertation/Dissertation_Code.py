@@ -86,7 +86,7 @@ np.set_printoptions(formatter={'float_kind':'{:f}'.format})
 
 
 #Set Parameters
-IMG_SIZE = 224 #this parameter sets image dimensions as 50*50
+IMG_SIZE = 150 #this parameter sets image dimensions as 50*50
 DATE = datetime.datetime.now().strftime('%d-%b-%Y')
 MODEL_PATH = f'models/{DATE}/'
 MODEL_NAME = 'FlowerClassifierTrial.model'.format(int(time.time()))
@@ -122,13 +122,13 @@ mac_label_val = '/Volumes/T7/Uni/label_val.npy'
 pc_labels = 'E:/Github/thesis/flowerDataset/imagelabels.mat'
 pc_URL = 'E:/Github/thesis/flowerDataset/Flower'
 pc_dataSplit = 'E:/Github/thesis/flowerDataset/setid.mat'
-pc_loaded_images = 'E:/Dissertation/loaded_images.npy'
-pc_image_train = 'E:/Dissertation/image_train.npy'
-pc_label_train = 'E:/Dissertation/label_train.npy'
-pc_image_test = 'E:/Dissertation/image_test.npy'
-pc_label_test = 'E:/Dissertation/label_test.npy'
-pc_image_val = 'E:/Dissertation/image_val.npy'
-pc_label_val = 'E:/Dissertation/label_val.npy'
+pc_loaded_images = 'E:/Dissertation/data/loaded_images.npy'
+pc_image_train = 'E:/Dissertation/data/image_train.npy'
+pc_label_train = 'E:/Dissertation/data/label_train.npy'
+pc_image_test = 'E:/Dissertation/data/image_test.npy'
+pc_label_test = 'E:/Dissertation/data/label_test.npy'
+pc_image_val = 'E:/Dissertation/data/image_val.npy'
+pc_label_val = 'E:/Dissertation/data/label_val.npy'
 
 
 # In[9]:
@@ -549,7 +549,7 @@ image_val[0]
 # In[52]:
 
 
-history = model.fit(image_train, label_train, batch_size=32, epochs=35, validation_data=(image_val, label_val), verbose=2, callbacks = [tensorboard])
+history = model.fit(image_train, label_train, batch_size=32, epochs=35, validation_data=(image_val, label_val), verbose=2)
 
 
 # In[ ]:
@@ -938,7 +938,7 @@ def generate_data(df, directory):
             img_id = extract_id(file)
             # get tensor of the mask
             image = Image.open(full_path)
-            image = image.resize((224, 224))
+            image = image.resize((IMG_SIZE, IMG_SIZE))
             image_vect = np.asarray(image)
             # print(image_vect.shape)
             # find the index for the image_id
