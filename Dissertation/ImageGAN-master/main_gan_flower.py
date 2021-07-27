@@ -33,7 +33,7 @@ def load_images(datapath, newsize):
 #--- PARAMETERS ---#
 
 # Number of epochs
-n_epochs = 15000
+n_epochs = 55000
 # Batch size
 batch_size = 64
 # 1 for loading a previously trained model
@@ -57,7 +57,7 @@ with tf.device('/GPU:0'):
         os.system("unzip flower_images.zip")
 
     # Load the data
-    datapath = "flower_images/0*"
+    datapath = "flower_images/1/*"
     imarrays = load_images(datapath, newsize)
 
     # Initialize the GAN

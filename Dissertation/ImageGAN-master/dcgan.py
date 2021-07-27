@@ -8,6 +8,8 @@ from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Activation, Flatten, Reshape, Conv2D, Conv2DTranspose, UpSampling2D, LeakyReLU, Dropout, BatchNormalization
 from tensorflow.keras.optimizers import Adam, RMSprop
 from tensorflow.keras.preprocessing.image import array_to_img
+from PIL import Image
+import PIL
 #from tensorflow.keras.utils import plot_model
 import matplotlib.pyplot as plt
 
@@ -201,7 +203,7 @@ class Image_DCGAN(object):
 
     def plot_images(self, save2file=False, fake=True, samples=16, noise=None, step=0):
         filename = 'outputs/image_sample'#.png'
-
+        fake_filename = "outputs/fake/image_step_%d" % step
         if fake:
             filename+="_fake.png"
             if noise is None:
@@ -218,16 +220,29 @@ class Image_DCGAN(object):
         for i in range(images.shape[0]):
             plt.subplot(4, 4, i+1)
             image = images[i, :, :, :]
+            new_image = np.array(images[i, :, :, :])
             #image = np.reshape(image, [self.img_rows, self.img_cols])
             img = array_to_img(image)
             plt.imshow(img)
+            im = Image.fromarray((new_image * 255).astype(np.uint8))
+            im.save(f"{fake_filename}-{i}.png")
             plt.axis('off')
         plt.tight_layout()
         if save2file:
+            print("saving file!")
             plt.savefig(filename)
+
             plt.close('all')
         else:
             plt.show()
+
+        # save images as a single plot
+        # for i in range(images.shape[0]):
+        #     image = images[i, :, :, :]
+        #     img = array_to_img(image)
+        #     plt.plot(img)
+        #     plt.imshow(img)
+
 
     def plot_loss_acc(self, d_losses, a_losses, d_acc, a_acc):
 
