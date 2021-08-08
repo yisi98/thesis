@@ -161,7 +161,7 @@ class Image_DCGAN(object):
             self.adversarial = self.DCGAN.adversarial_model()
             self.generator = self.DCGAN.generator()
 
-    def train(self, train_steps=10, batch_size=64, save_interval=0):
+    def train(self, label="N/A", train_steps=10, batch_size=64, save_interval=0):
         noise_input = None
         if save_interval>0:
             noise_input = np.random.uniform(0., 1.0, size=[16, 100])
@@ -193,7 +193,7 @@ class Image_DCGAN(object):
                     #self.generator.save("models/generator_step_%d.h5"%(i+1))
                     #self.discriminator.save("models/discriminator_step_%d.h5"%(i+1))
                     #self.adversarial.save("models/adversarial_step_%d.h5"%(i+1))
-                    self.plot_images(save2file=True, samples=noise_input.shape[0], noise=noise_input, step=(i+1))
+                    self.plot_images(label, save2file=True, samples=noise_input.shape[0], noise=noise_input, step=(i+1))
 
         self.generator.save("models/generator_last.h5")
         self.discriminator.save("models/discriminator_last.h5")
@@ -201,15 +201,15 @@ class Image_DCGAN(object):
 
         return d_losses, a_losses, d_acc, a_acc
 
-    def plot_images(self, save2file=False, fake=True, samples=16, noise=None, step=0):
-        filename = 'outputs/image_sample'#.png'
-        fake_filename = "outputs/fake/image_step_%d" % step
+    def plot_images(self, label="N/A", save2file=False, fake=True, samples=16, noise=None, step=0):
+        filename = f'outputs/{label}/image_sample'#.png'
+        fake_filename = f"outputs/fake/{label}/image_step_{step}"
         if fake:
             filename+="_fake.png"
             if noise is None:
                 noise = np.random.uniform(0., 1.0, size=[samples, 100])
             else:
-                filename = "outputs/image_step_%d.png" % step
+                filename = f"outputs/{label}/image_step_{step}.png"
             images = self.generator.predict(noise)
         else:
             filename+="_true.png"
@@ -231,7 +231,6 @@ class Image_DCGAN(object):
         if save2file:
             print("saving file!")
             plt.savefig(filename)
-
             plt.close('all')
         else:
             plt.show()

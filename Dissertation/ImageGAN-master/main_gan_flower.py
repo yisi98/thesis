@@ -33,7 +33,7 @@ def load_images(datapath, newsize):
 #--- PARAMETERS ---#
 
 # Number of epochs
-n_epochs = 55000
+n_epochs = 28000
 # Batch size
 batch_size = 64
 # 1 for loading a previously trained model
@@ -57,22 +57,34 @@ with tf.device('/GPU:0'):
         os.system("unzip flower_images.zip")
 
     # Load the data
-    datapath = "flower_images/1/*"
-    imarrays = load_images(datapath, newsize)
+    flowers_path = os.path.join(os.getcwd(), 'flower_images')
 
-    # Initialize the GAN
-    model_dcgan = Image_DCGAN(imarrays, load_prev_model=load_prev_model)
+    count = 0
+    for file in os.listdir(flowers_path):
+        full_path = os.path.join(flowers_path, file)
+        if os.path.isdir(full_path):
+            datapath = f"flower_images/{file}/*"
+            imarrays = load_images(datapath, newsize)
 
-    # Train the GAN
-    if train_model:
-        d_losses, a_losses, d_acc, a_acc = model_dcgan.train(train_steps=n_epochs, batch_size=batch_size, save_interval=500)
+            # create output folders for each class
+            if not os.path.isdir(f"outputs/{file}"):
+                os.mkdir(f"outputs/{file}")
+            if not os.path.isdir(f"outputs/fake/{file}"):
+                os.mkdir(f"outputs/fake/{file}")
 
-        # Save and plot the losses
-        np.savetxt("outputs/losses.txt",np.transpose([d_losses, a_losses, d_acc, a_acc]))
-        model_dcgan.plot_loss_acc(d_losses, a_losses, d_acc, a_acc)
+            # Initialize the GAN
+            model_dcgan = Image_DCGAN(imarrays, load_prev_model=load_prev_model)
 
-    # Plot some true and fake sample images
-    model_dcgan.plot_images(fake=True, save2file=True)
-    model_dcgan.plot_images(fake=False, save2file=True)
+            # Train the GAN
+            if train_model:
+                d_losses, a_losses, d_acc, a_acc = model_dcgan.train(label=file, train_steps=n_epochs, batch_size=batch_size, save_interval=500)
 
-print("Finished. Time elapsed:",datetime.timedelta(seconds=time.time()-time_ini))
+                # Save and plot the losses
+                np.savetxt("outputs/losses.txt",np.transpose([d_losses, a_losses, d_acc, a_acc]))
+                model_dcgan.plot_loss_acc(d_losses, a_losses, d_acc, a_acc)
+
+            # Plot some true and fake sample images
+            model_dcgan.plot_images(label=file, fake=True, save2file=True)
+            model_dcgan.plot_images(label=file, fake=False, save2file=True)
+
+            print(f"Finished processing {full_path}. Time elapsed: ,{datetime.timedelta(seconds=time.time()-time_ini)}")
