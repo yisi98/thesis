@@ -203,7 +203,7 @@ class Image_DCGAN(object):
 
     def plot_images(self, label="N/A", save2file=False, fake=True, samples=16, noise=None, step=0):
         filename = f'outputs/{label}/image_sample'#.png'
-        fake_filename = f"outputs/fake/{label}/image_step_{step}"
+        fake_filename = f"outputs/de to/{label}/image_step_{step}"
         if fake:
             filename+="_fake.png"
             if noise is None:
