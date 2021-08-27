@@ -1,0 +1,4 @@
+artifact_location: file:///E:/Github/thesis/Dissertation/mlruns/6
+experiment_id: '6'
+lifecycle_stage: active
+name: best_model
